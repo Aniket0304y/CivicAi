@@ -22,8 +22,12 @@ print("Model loaded!")
 with open(CLASS_PATH, "r") as f:
     class_map = json.load(f)["class_names"]
 
-# Invert {"garbage":0} → {0:"garbage"}
 inv_map = {v: k for k, v in class_map.items()}
+
+
+@app.route("/")
+def home():
+    return "AI Model is Running 🚀"
 
 
 @app.route("/predict", methods=["POST"])
@@ -33,14 +37,11 @@ def predict():
 
     file = request.files["file"]
 
-    # Load image from uploaded file
     img = image.load_img(BytesIO(file.read()), target_size=IMG_SIZE)
 
-    # Preprocess
     arr = image.img_to_array(img) / 255.0
     arr = np.expand_dims(arr, axis=0)
 
-    # Predict
     pred = model.predict(arr, verbose=0)[0]
     idx = int(np.argmax(pred))
 
@@ -51,4 +52,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # important for Render
+    app.run(host="0.0.0.0", port=port)
