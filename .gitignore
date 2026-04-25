@@ -17,7 +17,9 @@ dist/
 
 # Ignore ML models (already there)
 ai-models/*.h5
-ai-models/*.keras
+ai-models/.venv/
+ai-models/demo_dataset/
+ai-models/test_images/
 ai-models/*.pt
 ai-models/*.pth
 ai-models/*.pkl
