@@ -24,7 +24,10 @@ const __dirname = path.dirname(__filename);
 // ✅ Middleware setup
 app.use(express.json()); // Parse JSON requests
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://civic-ai-five.vercel.app"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 })); // Allow frontend (React) to access backend API

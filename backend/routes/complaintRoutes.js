@@ -51,7 +51,7 @@ router.post("/", upload.single("image"), async (req, res) => {
         formData.append("file", fs.createReadStream(req.file.path));
 
         const aiResponse = await axios.post(
-          "http://127.0.0.1:5001/predict",
+          "https://your-ai-model.onrender.com/predict",
           formData,
           { headers: formData.getHeaders(), timeout: 5000 }
         );
