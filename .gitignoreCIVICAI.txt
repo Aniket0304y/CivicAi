@@ -1,0 +1,7 @@
+# Ignore large ML model files
+ai-models/*.h5
+ai-models/*.keras
+ai-models/*.pt
+ai-models/*.pth
+ai-models/*.pkl
+ai-models/*.joblib

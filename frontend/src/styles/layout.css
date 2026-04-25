@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/* === GLOBAL LAYOUT STRUCTURE === */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  color: #f8fafc;
+
+  /* CLEAN NAVY BACKGROUND */
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #111827,
+    #020617
+  );
+
+  overflow: hidden;
+}
+
+/* === MAIN AREA === */
+.main-area {
+  flex: 1;
+  margin-left: 180px;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 60px 60px;
+  box-sizing: border-box;
+
+  /* SOFT LIGHT FROM TOP */
+  background: radial-gradient(
+    circle at top center,
+    rgba(56, 189, 248, 0.18),
+    transparent 55%
+  );
+}
+
+/* === CONTENT SECTION === */
+.content {
+  width: 100%;
+  max-width: 1200px;
+  padding: 40px 20px 60px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+}
+
+/* === SCROLLBAR === */
+.main-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-area::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #22d3ee,
+    #38bdf8
+  );
+  border-radius: 10px;
+}
+
+.main-area::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #67e8f9,
+    #60a5fa
+  );
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .main-area {
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-area {
+    margin-left: 0;
+    padding: 30px 20px;
+  }
+
+  .content {
+    padding: 20px 10px 40px;
+  }
+}

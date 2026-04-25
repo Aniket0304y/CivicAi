@@ -1,0 +1,67 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(20, 10, 50, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  padding: 0 30px 0 40px;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+/* Navbar right side (Hi, Aniket + Logout) */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #e1d8ff;
+  font-size: 1rem;
+}
+
+/* Logout button fix */
+.navbar-right button {
+  background: linear-gradient(135deg, #6d40ff, #8a62ff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.navbar-right button:hover {
+  background: linear-gradient(135deg, #7d50ff, #9a75ff);
+  transform: translateY(-1px);
+}
+
+/* Navbar title */
+.navbar h3 {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.3rem;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 20px;
+    gap: 8px;
+  }
+
+  .navbar-right {
+    justify-content: center;
+  }
+}

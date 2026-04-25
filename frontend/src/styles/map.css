@@ -1,0 +1,50 @@
+.map-page {
+  margin-left: 260px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  height: 100vh;
+  background: #F4F6F9;
+}
+
+.filter-panel {
+  width: 250px;
+  height: 550px;
+  background: rgba(5, 22, 26, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  color: #E0F2F2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filter-panel select,
+.filter-panel button {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #3BACB6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.filter-panel button:hover {
+  background: #0E8388;
+}
+
+.map-container-pro {
+  flex: 1;
+}
+
+.map-area {
+  width: 100%;
+  height: 85vh;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0,0,0,0.2);
+}
