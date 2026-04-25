@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/form.css";
 
+// ✅ Base API (IMPORTANT)
+const API = "https://civicai-1-u7ws.onrender.com";
+
 function AuthPortal() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
@@ -14,7 +17,7 @@ function AuthPortal() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Reset input fields when toggling between login/register
+  // Reset input fields
   useEffect(() => {
     setEmail("");
     setPassword("");
@@ -23,51 +26,60 @@ function AuthPortal() {
     setMessage("");
   }, [isLogin]);
 
-  // Handle login
+  // ================= LOGIN =================
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
-      const res = await axios.post("https://civicai-1-u7ws.onrender.com", {
+      const res = await axios.post(`${API}/api/auth/login`, {
         email,
         password,
       });
+
       const user = res.data;
 
-      if (user.role !== role) {
-        setError(`❌ You are not authorized to log in as ${role}.`);
-        return;
+      // ✅ store user
+      localStorage.setItem("userInfo", JSON.stringify(user));
+
+      // ✅ role-based navigation
+      if (user.role === "admin") {
+        navigate("/complaints");
+      } else {
+        navigate("/");
       }
 
-      localStorage.setItem("userInfo", JSON.stringify(user));
-      // after successful login:
-if (user.role === "admin") navigate("/complaints");
-else navigate("/"); // NOT "/dashboard" — your App uses "/"
-
-
     } catch (err) {
+      console.error("Login error:", err);
       setError("❌ Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle registration
+  // ================= REGISTER =================
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
     setLoading(true);
+
     try {
-      await axios.post("https://civicai-1-u7ws.onrender.com/api/auth/register", {
+      await axios.post(`${API}/api/auth/register`, {
         name,
         email,
         password,
       });
+
       setMessage("✅ Registration successful! Redirecting...");
-      setTimeout(() => setIsLogin(true), 1500);
+
+      setTimeout(() => {
+        setIsLogin(true);
+      }, 1500);
+
     } catch (err) {
+      console.error("Register error:", err);
       setError(err.response?.data?.message || "❌ Registration failed!");
     } finally {
       setLoading(false);
@@ -76,7 +88,8 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
 
   return (
     <div className={`auth-container ${!isLogin ? "slide-active" : ""}`}>
-      {/* ===== Login Section ===== */}
+
+      {/* ===== LOGIN ===== */}
       <div className="form-section login-section">
         <h2 className="auth-title">Welcome Back 👋</h2>
         <p className="auth-subtitle">Login to continue to CivicAI</p>
@@ -130,6 +143,7 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
         </form>
 
         {error && <p className="error-msg">{error}</p>}
+
         <p className="switch-text">
           Don’t have an account?{" "}
           <button
@@ -142,10 +156,10 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
         </p>
       </div>
 
-      {/* ===== Register Section ===== */}
+      {/* ===== REGISTER ===== */}
       <div className="form-section register-section">
         <h2 className="auth-title">Create Account ✨</h2>
-        <p className="auth-subtitle">Join CivicAI to make a difference</p>
+        <p className="auth-subtitle">Join CivicAI</p>
 
         <form onSubmit={handleRegister}>
           <label>Name</label>
@@ -176,13 +190,16 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
           />
 
           <button className="btn-primary" disabled={loading}>
-            {loading ? "Creating Account..." : "Register"}
+            {loading ? "Creating..." : "Register"}
           </button>
         </form>
 
         {message && (
-          <p style={{ color: "#4ade80", textAlign: "center" }}>{message}</p>
+          <p style={{ color: "#4ade80", textAlign: "center" }}>
+            {message}
+          </p>
         )}
+
         {error && <p className="error-msg">{error}</p>}
 
         <p className="switch-text">
@@ -196,6 +213,7 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
           </button>
         </p>
       </div>
+
     </div>
   );
 }
