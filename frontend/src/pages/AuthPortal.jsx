@@ -29,7 +29,7 @@ function AuthPortal() {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
+      const res = await axios.post("https://civicai-1-u7ws.onrender.com", {
         email,
         password,
       });
@@ -60,7 +60,7 @@ else navigate("/"); // NOT "/dashboard" — your App uses "/"
     setMessage("");
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("https://civicai-1-u7ws.onrender.com/api/auth/register", {
         name,
         email,
         password,

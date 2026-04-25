@@ -9,6 +9,9 @@ import "leaflet/dist/leaflet.css";
 function ComplaintForm() {
   const LOCATIONIQ_API_KEY = "pk.858c70e800dd415cdb0a7df637469a25";
 
+  // ✅ BASE URL (BEST PRACTICE)
+  const API = "https://civicai-1-u7ws.onrender.com";
+
   const [formData, setFormData] = useState({
     issueType: "",
     description: "",
@@ -27,9 +30,7 @@ function ComplaintForm() {
   const [showLocationConfirm, setShowLocationConfirm] = useState(false);
   const [showMapPicker, setShowMapPicker] = useState(false);
 
-  /* ======================================================
-     📍 AUTO FETCH LOCATION
-     ====================================================== */
+  /* ================= LOCATION ================= */
   useEffect(() => {
     if (!navigator.geolocation) {
       alert("Geolocation not supported");
@@ -53,7 +54,7 @@ function ComplaintForm() {
           );
           const data = await res.json();
 
-          if (data && data.display_name) {
+          if (data?.display_name) {
             setFormData((prev) => ({
               ...prev,
               address: data.display_name,
@@ -69,9 +70,7 @@ function ComplaintForm() {
     );
   }, []);
 
-  /* ======================================================
-     🗺️ MAP PICKER COMPONENT
-     ====================================================== */
+  /* ================= MAP PICKER ================= */
   function LocationPicker({ close }) {
     const LocationMarker = () => {
       useMapEvents({
@@ -99,12 +98,8 @@ function ComplaintForm() {
 
     return (
       <div className="map-wrapper">
-        <p><strong>📍 Click on map to choose location</strong></p>
-        <MapContainer
-          center={[28.6139, 77.209]}
-          zoom={12}
-          style={{ height: "400px", borderRadius: "10px" }}
-        >
+        <p><strong>📍 Click on map</strong></p>
+        <MapContainer center={[28.6139, 77.209]} zoom={12} style={{ height: "400px" }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <LocationMarker />
         </MapContainer>
@@ -112,12 +107,7 @@ function ComplaintForm() {
     );
   }
 
-  /* ======================================================
-     🧾 FORM HANDLERS
-     ====================================================== */
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
+  /* ================= IMAGE + AI ================= */
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -127,15 +117,18 @@ function ComplaintForm() {
 
     try {
       setPredicting(true);
+
       const aiData = new FormData();
       aiData.append("file", file);
 
-      const res = await fetch("http://127.0.0.1:5001/predict", {
+      // ✅ FIXED AI URL
+      const res = await fetch(`${API}/predict`, {
         method: "POST",
         body: aiData,
       });
 
       const data = await res.json();
+
       if (data.prediction) {
         setFormData((prev) => ({
           ...prev,
@@ -150,6 +143,7 @@ function ComplaintForm() {
     }
   };
 
+  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -157,8 +151,10 @@ function ComplaintForm() {
       const payload = new FormData();
       Object.entries(formData).forEach(([k, v]) => payload.append(k, v));
 
-      await axios.post("http://localhost:5000/api/complaints", payload);
-      setMessage("✅ Complaint submitted successfully!");
+      // ✅ FIXED BACKEND URL
+      await axios.post(`${API}/api/complaints`, payload);
+
+      setMessage("✅ Complaint submitted!");
 
       setFormData({
         ...formData,
@@ -168,86 +164,45 @@ function ComplaintForm() {
         userEmail: "",
         image: null,
       });
+
       setPreview(null);
     } catch {
       setMessage("❌ Failed to submit complaint");
     }
   };
 
-  /* ======================================================
-     🧱 UI
-     ====================================================== */
+  /* ================= UI ================= */
   return (
     <Layout>
       <div className="form-card">
-        <h2>Submit a Complaint</h2>
+        <h2>Submit Complaint</h2>
 
-        {/* LOCATION CONFIRM */}
         {showLocationConfirm && (
-          <div className="location-confirm-box">
-            <p><strong>📍 Detected Location</strong></p>
+          <div>
             <p>{formData.address}</p>
-
-            <button
-              type="button"
-              className="btn-confirm"
-              onClick={() => setShowLocationConfirm(false)}
-            >
-              ✔ Correct
-            </button>
-
-            <button
-              type="button"
-              className="btn-change"
-              onClick={() => {
-                setShowLocationConfirm(false);
-                setShowMapPicker(true);
-              }}
-            >
-              ✏ Change on Map
-            </button>
+            <button onClick={() => setShowLocationConfirm(false)}>✔ OK</button>
+            <button onClick={() => setShowMapPicker(true)}>Change</button>
           </div>
         )}
 
-        {/* MAP PICKER */}
         {showMapPicker && (
           <LocationPicker close={() => setShowMapPicker(false)} />
         )}
 
-        <form onSubmit={handleSubmit} className="form-grid">
-          <label>Issue Type</label>
-          <select name="issueType" value={formData.issueType} onChange={handleChange}>
-            <option value="">Select issue (or AI)</option>
-            <option value="garbage">Garbage</option>
-            <option value="potholes">Pothole</option>
-            <option value="open_manhole">Open Manhole</option>
-            <option value="streetlight_bad">Streetlight (Bad)</option>
-          </select>
+        <form onSubmit={handleSubmit}>
+          <input name="userName" placeholder="Name" onChange={(e)=>setFormData({...formData,userName:e.target.value})}/>
+          <input name="userEmail" placeholder="Email" onChange={(e)=>setFormData({...formData,userEmail:e.target.value})}/>
+          
+          <textarea name="description" onChange={(e)=>setFormData({...formData,description:e.target.value})}/>
 
-          {predicting && <p>🧠 Detecting issue…</p>}
+          <input type="file" onChange={handleImageChange} />
 
-          <label>Description</label>
-          <textarea name="description" value={formData.description} onChange={handleChange} required />
+          {preview && <img src={preview} width="100" />}
 
-          <label>Address</label>
-          <input name="address" value={formData.address} readOnly />
-
-          <label>Your Name</label>
-          <input name="userName" value={formData.userName} onChange={handleChange} required />
-
-          <label>Your Email</label>
-          <input name="userEmail" value={formData.userEmail} onChange={handleChange} required />
-
-          <label>Upload Image</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} required />
-          {preview && <img src={preview} className="preview-img" alt="preview" />}
-
-          <button className="btn-primary" type="submit">
-            Submit Complaint
-          </button>
+          <button type="submit">Submit</button>
         </form>
 
-        {message && <p className="form-message">{message}</p>}
+        {message && <p>{message}</p>}
       </div>
     </Layout>
   );
