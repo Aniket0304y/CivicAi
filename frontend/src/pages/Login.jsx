@@ -15,7 +15,7 @@ function Login() {
     setError("");
 
     try {
-      const res = await axios.post("https://civicai-1-u7ws.onrender.com/api/auth/login", {
+      const res = await axios.post("https://civicai-10cr.onrender.com/api/auth/login", {
         email,
         password,
       });

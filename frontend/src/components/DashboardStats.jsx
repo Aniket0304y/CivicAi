@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/dashboard.css";
 
-const API = "https://civicai-1-u7ws.onrender.com";
+const API = "https://civicai-10cr.onrender.com";
 
 function DashboardStats() {
   const [stats, setStats] = useState({ total: 0, resolved: 0, pending: 0 });

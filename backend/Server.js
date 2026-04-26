@@ -26,7 +26,7 @@ app.use(express.json()); // Parse JSON requests
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://civic-ai-five.vercel.app"
+    "https://civic-79gdpkqt0-aniketyadav9064-4223s-projects.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true

@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // ✅ ADD THIS
-const API = "https://civicai-1-u7ws.onrender.com";
+const API = "https://civicai-10cr.onrender.com";
 
 function ComplaintList() {
   const [complaints, setComplaints] = useState([]);

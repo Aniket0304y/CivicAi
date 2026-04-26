@@ -82,7 +82,7 @@ function MapView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://civicai-1-u7ws.onrender.com/api/complaints/all");
+        const res = await axios.get("https://civicai-10cr.onrender.com/api/complaints/all");
         setComplaints(res.data);
       } catch (err) {
         console.error("Error loading complaints:", err);

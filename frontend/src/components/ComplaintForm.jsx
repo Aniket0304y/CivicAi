@@ -9,8 +9,9 @@ import "leaflet/dist/leaflet.css";
 function ComplaintForm() {
   const LOCATIONIQ_API_KEY = "pk.858c70e800dd415cdb0a7df637469a25";
 
-  // ✅ BASE URL (BEST PRACTICE)
-  const API = "https://civicai-1-u7ws.onrender.com";
+  // ✅ BASE URLS
+  const BACKEND_API = "https://civicai-10cr.onrender.com";
+  const AI_API = "https://civicai-1-u7ws.onrender.com";
 
   const [formData, setFormData] = useState({
     issueType: "",
@@ -122,7 +123,7 @@ function ComplaintForm() {
       aiData.append("file", file);
 
       // ✅ FIXED AI URL
-      const res = await fetch(`${API}/predict`, {
+      const res = await fetch(`${AI_API}/predict`, {
         method: "POST",
         body: aiData,
       });
@@ -152,7 +153,7 @@ function ComplaintForm() {
       Object.entries(formData).forEach(([k, v]) => payload.append(k, v));
 
       // ✅ FIXED BACKEND URL
-      await axios.post(`${API}/api/complaints`, payload);
+      await axios.post(`${BACKEND_API}/api/complaints`, payload);
 
       setMessage("✅ Complaint submitted!");
 
@@ -197,7 +198,7 @@ function ComplaintForm() {
 
           <input type="file" onChange={handleImageChange} />
 
-          {preview && <img src={preview} width="100" />}
+          {preview && <img src={preview} width="100" alt="Preview of uploaded image" />}
 
           <button type="submit">Submit</button>
         </form>

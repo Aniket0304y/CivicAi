@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/form.css";
 
 // ✅ Base API (IMPORTANT)
-const API = "https://civicai-1-u7ws.onrender.com";
+const API = "https://civicai-10cr.onrender.com";
 
 function AuthPortal() {
   const [isLogin, setIsLogin] = useState(true);

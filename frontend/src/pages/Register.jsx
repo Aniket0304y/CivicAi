@@ -17,7 +17,7 @@ function Register() {
     setError("");
 
     try {
-      await axios.post("https://civicai-1-u7ws.onrender.com/api/auth/register", {
+      await axios.post("https://civicai-10cr.onrender.com/api/auth/register", {
         name,
         email,
         password,
