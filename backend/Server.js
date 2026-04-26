@@ -24,13 +24,17 @@ const __dirname = path.dirname(__filename);
 // ✅ Middleware setup
 app.use(express.json()); // Parse JSON requests
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://civic-79gdpkqt0-aniketyadav9064-4223s-projects.vercel.app"
-  ],
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-})); // Allow frontend (React) to access backend API
+}));
+// app.use(cors({
+//   origin: [
+//     "http://localhost:3000",
+//     "https://civic-79gdpkqt0-aniketyadav9064-4223s-projects.vercel.app"
+//   ],
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true
+// })); // Allow frontend (React) to access backend API
 
 // ✅ Connect to MongoDB
 connectDB();
