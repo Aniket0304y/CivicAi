@@ -10,7 +10,7 @@ function ComplaintForm() {
   const LOCATIONIQ_API_KEY = "pk.858c70e800dd415cdb0a7df637469a25";
 
   // ✅ BASE URLS
-  const BACKEND_API = "https://civicai-10cr.onrender.com";
+ const BACKEND_API = "https://civicai-10cr.onrender.com";
   const AI_API = "https://civicai-1-u7ws.onrender.com";
 
   const [formData, setFormData] = useState({
@@ -145,33 +145,82 @@ function ComplaintForm() {
   };
 
   /* ================= SUBMIT ================= */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  /* ================= SUBMIT ================= */
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const payload = new FormData();
-      Object.entries(formData).forEach(([k, v]) => payload.append(k, v));
+  try {
+    const payload = new FormData();
 
-      // ✅ FIXED BACKEND URL
-      await axios.post(`${BACKEND_API}/api/complaints`, payload);
+    Object.entries(formData).forEach(([key, value]) => {
+      payload.append(key, value);
+    });
 
-      setMessage("✅ Complaint submitted!");
+    console.log("Submitting complaint...");
+    console.log("Payload:", formData);
 
-      setFormData({
-        ...formData,
-        issueType: "",
-        description: "",
-        userName: "",
-        userEmail: "",
-        image: null,
-      });
+    const response = await axios.post(
+      `${BACKEND_API}/api/complaints`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-      setPreview(null);
-    } catch {
-      setMessage("❌ Failed to submit complaint");
+    console.log("SUCCESS RESPONSE:", response.data);
+
+    setMessage("✅ Complaint submitted successfully!");
+
+    setFormData({
+      issueType: "",
+      description: "",
+      address: formData.address,
+      userName: "",
+      userEmail: "",
+      image: null,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+    });
+
+    setPreview(null);
+
+  } catch (err) {
+    console.log("========== COMPLAINT ERROR ==========");
+    console.log("FULL ERROR:", err);
+
+    if (err.response) {
+      console.log("STATUS:", err.response.status);
+      console.log("RESPONSE DATA:", err.response.data);
+
+      alert(
+        `ERROR ${err.response.status}\n\n` +
+        JSON.stringify(err.response.data, null, 2)
+      );
+
+      setMessage(
+        `❌ ${err.response.data.message || "Failed to submit complaint"}`
+      );
     }
-  };
+    else if (err.request) {
+      console.log("REQUEST ERROR:", err.request);
 
+      alert(
+        "Server did not send a response.\n\nCheck Render backend logs."
+      );
+
+      setMessage("❌ No response from server");
+    }
+    else {
+      console.log("GENERAL ERROR:", err.message);
+
+      alert(err.message);
+
+      setMessage(`❌ ${err.message}`);
+    }
+  }
+};
   /* ================= UI ================= */
   return (
     <Layout>

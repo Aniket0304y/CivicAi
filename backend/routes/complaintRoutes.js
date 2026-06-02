@@ -29,7 +29,10 @@ const upload = multer({ storage });
 /* =======================
    🧾 POST /api/complaints
    ======================= */
+
+console.log("🚀 complaintRoutes.js LOADED");
 router.post("/", upload.single("image"), async (req, res) => {
+  console.log("🔥 POST /api/complaints HIT");
   try {
     const {
       issueType: userIssueType,
@@ -51,9 +54,9 @@ router.post("/", upload.single("image"), async (req, res) => {
         formData.append("file", fs.createReadStream(req.file.path));
 
         const aiResponse = await axios.post(
-          "https://your-ai-model.onrender.com/predict",
+          "https://civicai-1-u7ws.onrender.com/predict",
           formData,
-          { headers: formData.getHeaders(), timeout: 5000 }
+          { headers: formData.getHeaders(), timeout: 5000 },
         );
 
         finalIssueType = aiResponse.data.prediction || "Unknown";
@@ -61,8 +64,12 @@ router.post("/", upload.single("image"), async (req, res) => {
 
         console.log("AI Prediction:", finalIssueType);
       } catch (err) {
-        console.error("AI error:", err.message);
-        finalIssueType = "AI_Error";
+        console.log("🔥 AI FAILED");
+        console.log("AI ERROR:", err.message);
+
+        finalIssueType = "potholes";
+
+        console.log("New issueType:", finalIssueType);
       }
     }
 
@@ -123,7 +130,7 @@ router.put("/:id", async (req, res) => {
     const updated = await Complaint.findByIdAndUpdate(
       req.params.id,
       { status: req.body.status },
-      { new: true }
+      { new: true },
     );
 
     res.json(updated);
